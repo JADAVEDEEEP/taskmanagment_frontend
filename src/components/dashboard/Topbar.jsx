@@ -32,7 +32,6 @@ function Topbar({ search, setSearch, setPage, userName, resultCount }) {
             </button>
           )}
         </div>
-        <button>Ctrl K</button>
         <div className="avatar">{userName.charAt(0).toUpperCase()}</div>
       </div>
     </header>

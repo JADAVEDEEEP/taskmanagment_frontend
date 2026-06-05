@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { FaApple, FaGoogle } from 'react-icons/fa'
 import AuthVisual from '../components/auth/AuthVisual'
 import Spinner from '../components/common/Spinner'
 import Toast from '../components/common/Toast'
@@ -25,15 +26,12 @@ function AuthPage({ onLogin }) {
     if (mode === 'register' && form.name.trim().length < 2) {
       return 'Name required hai.'
     }
-
     if (!/^\S+@\S+\.\S+$/.test(form.email)) {
       return 'Valid email enter karo.'
     }
-
     if (form.password.length < 6) {
       return 'Password minimum 6 characters ka hona chahiye.'
     }
-
     return ''
   }
 
@@ -66,6 +64,11 @@ function AuthPage({ onLogin }) {
         body: JSON.stringify({ email: form.email, password: form.password }),
       })
 
+      if (!data?.token) {
+        setError('Server response me token missing hai. Backend check karo.')
+        return
+      }
+
       onLogin({
         token: data.token,
         userName: data.user?.name || form.email.split('@')[0],
@@ -79,69 +82,88 @@ function AuthPage({ onLogin }) {
 
   return (
     <main className="auth-shell">
+      <div className="orb orb-1" />
+      <div className="orb orb-2" />
+      <div className="orb orb-3" />
       <section className="auth-panel">
-        <div className="brand-mark">
-          <span></span>
-          <span></span>
-        </div>
-        <h1>{mode === 'login' ? 'Welcome Back !' : 'Sign Up'}</h1>
-        <p>{mode === 'login' ? 'Please enter your details' : 'Create your account to manage every task'}</p>
+        <div className="auth-card">
+          <h1>{mode === 'login' ? 'Welcome back' : 'Create account'}</h1>
+          <p>{mode === 'login' ? 'Sign in to continue' : 'Get started for free'}</p>
 
-        <form className="auth-form" onSubmit={handleSubmit}>
-          {mode === 'register' && (
-            <label>
-              Name
+          <form className="auth-form" onSubmit={handleSubmit}>
+            {mode === 'register' && (
+              <div className="floating-field">
+                <input
+                  type="text"
+                  value={form.name}
+                  onChange={(event) => updateField('name', event.target.value)}
+                  placeholder=" "
+                />
+                <span>Name</span>
+              </div>
+            )}
+
+            <div className="floating-field">
               <input
-                value={form.name}
-                onChange={(event) => updateField('name', event.target.value)}
-                placeholder="Enter your name"
+                type="email"
+                value={form.email}
+                onChange={(event) => updateField('email', event.target.value)}
+                placeholder=" "
               />
-            </label>
-          )}
-
-          <label>
-            Email Address
-            <input
-              value={form.email}
-              onChange={(event) => updateField('email', event.target.value)}
-              placeholder="name@example.com"
-            />
-          </label>
-
-          <label>
-            Password
-            <input
-              type="password"
-              value={form.password}
-              onChange={(event) => updateField('password', event.target.value)}
-              placeholder="Minimum 6 characters"
-            />
-          </label>
-
-          {mode === 'login' && (
-            <div className="auth-row">
-              <label className="check-line">
-                <input type="checkbox" /> Remember me
-              </label>
-              <button type="button" className="link-button">
-                Forgot Password?
-              </button>
+              <span>Email</span>
             </div>
-          )}
 
-          {error && <p className="form-error">{error}</p>}
-          <Toast message={success} />
+            <div className="floating-field">
+              <input
+                type="password"
+                value={form.password}
+                onChange={(event) => updateField('password', event.target.value)}
+                placeholder=" "
+              />
+              <span>Password</span>
+            </div>
 
-          <button className="primary-button" type="submit" disabled={loading}>
-            {loading && <Spinner small />}
-            {mode === 'login' ? 'Login' : 'Create Account'} <span>-&gt;</span>
+            {mode === 'login' && (
+              <div className="auth-row">
+                <label className="check-line">
+                  <input type="checkbox" /> Remember me
+                </label>
+                <button type="button" className="link-button">Forgot password?</button>
+              </div>
+            )}
+
+            {error && <p className="form-error">{error}</p>}
+            <Toast message={success} />
+
+            <button className="primary-button" type="submit" disabled={loading}>
+              {loading && <Spinner small />}
+              {mode === 'login' ? 'Sign in' : 'Create account'}
+            </button>
+          </form>
+
+          <div className="auth-divider">
+            <span></span>
+            <small>or continue with</small>
+            <span></span>
+          </div>
+
+          <div className="social-actions">
+            <button type="button" onClick={() => setError('Google login abhi configure nahi hai.')}>
+              <FaGoogle /> Google
+            </button>
+            <button type="button" onClick={() => setError('Apple login abhi configure nahi hai.')}>
+              <FaApple /> Apple
+            </button>
+          </div>
+
+          <button className="switch-auth" type="button" onClick={() => setMode(mode === 'login' ? 'register' : 'login')}>
+            {mode === 'login' ? (
+              <>Not a member? <span>Sign up</span></>
+            ) : (
+              <>Already have an account? <span>Sign in</span></>
+            )}
           </button>
-        </form>
-
-        <p className="terms">By creating an account, you agree to our Terms of Service and Privacy Policy</p>
-        <button className="switch-auth" type="button" onClick={() => setMode(mode === 'login' ? 'register' : 'login')}>
-          {mode === 'login' ? "Don't have an account? Sign Up" : 'Already have an account? Sign In'}
-        </button>
+        </div>
       </section>
 
       <AuthVisual />

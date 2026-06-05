@@ -21,9 +21,10 @@ function Sidebar({ onLogout }) {
         <button>Setting</button>
         <button>Help</button>
       </nav>
-      <button className="logout" onClick={onLogout}>
-        Log Out
-      </button>
+      <button className="logout-btn" onClick={onLogout}>
+  <span className="logout-icon">↩</span>
+  Logout
+</button>
     </aside>
   )
 }
