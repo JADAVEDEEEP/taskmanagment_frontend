@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Task Management Web Application
 
 A MERN stack task management app with JWT authentication, protected task APIs, responsive React UI, CRUD operations, search, filter, pagination, and status tracking.
@@ -126,3 +127,6 @@ Authorization: Bearer <token>
 - Login/register must be completed before accessing the dashboard.
 - Each user can only access their own tasks.
 - The task status is stored as `pending` or `completed`.
+=======
+# taskmanagment_frontend
+>>>>>>> 78d43bf0eaedf4c68225889df0e47b55750dfa0f

@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+const API_URL = import.meta.env.VITE_API_URL || 'https://taskmanagment-backend-96wl.onrender.com'
 
 export async function apiRequest(path, options = {}, token = '') {
   const response = await fetch(`${API_URL}${path}`, {
