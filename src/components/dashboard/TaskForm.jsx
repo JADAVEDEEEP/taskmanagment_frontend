@@ -17,6 +17,7 @@ function TaskForm({ taskForm, setTaskForm, editingId, setEditingId, onSubmit, me
       />
       <select value={taskForm.status} onChange={(event) => setTaskForm({ ...taskForm, status: event.target.value })}>
         <option value="pending">Pending</option>
+        {/* <option value="active">Active</option> */}
         <option value="completed">Completed</option>
       </select>
       <button className="primary-button" type="submit" disabled={loading}>

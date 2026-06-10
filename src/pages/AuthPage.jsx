@@ -9,6 +9,7 @@ const initialForm = {
   name: '',
   email: '',
   password: '',
+  image:null
 }
 
 function AuthPage({ onLogin }) {
@@ -48,16 +49,28 @@ function AuthPage({ onLogin }) {
 
     try {
       setLoading(true)
-      if (mode === 'register') {
-        await apiRequest('/userapi/post-user', {
-          method: 'POST',
-          body: JSON.stringify(form),
-        })
-        setMode('login')
-        setForm(initialForm)
-        setSuccess('Account created successfully. Ab login karo.')
-        return
-      }
+   if (mode === 'register') {
+
+  const formData = new FormData()
+
+  formData.append('name', form.name)
+  formData.append('email', form.email)
+  formData.append('password', form.password)
+
+  if (form.image) {
+    formData.append('image', form.image)
+  }
+
+  await apiRequest('/userapi/post-user', {
+    method: 'POST',
+    body: formData,
+  })
+
+  setMode('login')
+  setForm(initialForm)
+  setSuccess('Account created successfully. Ab login karo.')
+  return
+}
 
       const data = await apiRequest('/userapi/login-user', {
         method: 'POST',
@@ -122,13 +135,42 @@ function AuthPage({ onLogin }) {
               />
               <span>Password</span>
             </div>
+         {mode === "register" && (
+  <div className="upload-box">
+    <label htmlFor="profileImage" className="upload-label">
+      {form.image
+        ? form.image.name
+        : "📸 Upload Profile Picture"}
+    </label>
+
+    <input
+      id="profileImage"
+      type="file"
+      hidden
+      accept="image/*"
+      onChange={(e) =>
+        updateField("image", e.target.files[0])
+      }
+    />
+  </div>
+)}
 
             {mode === 'login' && (
               <div className="auth-row">
                 <label className="check-line">
                   <input type="checkbox" /> Remember me
                 </label>
-                <button type="button" className="link-button">Forgot password?</button>
+                <button
+                  type="button"
+                  className="link-button"
+                  onClick={() => {
+                    window.history.pushState({}, '', '/forgot-password')
+                    window.dispatchEvent(new PopStateEvent('popstate'))
+                  }}
+                >
+                  Forgot password?
+                </button>
+
               </div>
             )}
 

@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import AuthPage from './pages/AuthPage'
 import Dashboard from './pages/Dashboard'
+// import ForgotPassword from './pages/ForgotPassword'
 
 function App() {
   const [token, setToken] = useState(() => localStorage.getItem('token') || '')
@@ -21,11 +23,21 @@ function App() {
     setUserName('User')
   }
 
-  if (!token) {
-    return <AuthPage onLogin={handleLogin} />
-  }
+  return (
+    <Routes>
+      {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
 
-  return <Dashboard token={token} userName={userName} onLogout={handleLogout} />
+      <Route
+        path="/"
+        element={token ? <Dashboard token={token} userName={userName} onLogout={handleLogout} /> : <AuthPage onLogin={handleLogin} />}
+      />
+
+      {/* fallback */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  )
 }
 
+
 export default App
+
