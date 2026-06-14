@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import AuthPage from './pages/AuthPage'
 import Dashboard from './pages/Dashboard'
-import ForgotPassword from './pages/ForgotPassword'
+
 
 function App() {
   const [token, setToken] = useState(() => localStorage.getItem('token') || '')
@@ -25,7 +25,7 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/forgot-password" element={<ForgotPassword />} />
+      
 
       <Route
         path="/"
